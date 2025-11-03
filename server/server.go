@@ -38,6 +38,14 @@ func StartServer(port string, authToken string, authService *auth.AuthService) {
 	// 只对 /v1 开头的端点进行认证
 	r.Use(PathBasedAuthMiddleware(authToken, []string{"/v1"}))
 
+	// 健康检查端点 - HuggingFace需要
+	r.GET("/health", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"status": "healthy",
+			"port":   port,
+		})
+	})
+
 	// 静态资源服务 - 前后端完全分离
 	r.Static("/static", "./static")
 	r.GET("/", func(c *gin.Context) {
@@ -228,6 +236,7 @@ func StartServer(port string, authToken string, authService *auth.AuthService) {
 		logger.String("auth_token", "***"))
 	logger.Info("AuthToken 验证已启用")
 	logger.Info("可用端点:")
+	logger.Info("  GET  /health                    - 健康检查端点")
 	logger.Info("  GET  /                          - 重定向到静态Dashboard")
 	logger.Info("  GET  /static/*                  - 静态资源服务")
 	logger.Info("  GET  /api/tokens                - Token池状态API")
