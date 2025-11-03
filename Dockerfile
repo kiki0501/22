@@ -64,8 +64,8 @@ RUN mkdir -p /home/appuser/.aws/sso/cache && \
 # 切换到非 root 用户
 USER appuser
 
-# 暴露默认端口
-EXPOSE 8080
+# 暴露默认端口（HuggingFace标准端口）
+EXPOSE 7860
 
 # 设置默认命令
 CMD ["./kiro2api"]

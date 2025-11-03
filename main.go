@@ -34,7 +34,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	port := "8080" // 默认端口
+	port := "7860" // 默认端口（HuggingFace标准端口）
 	if len(os.Args) > 1 {
 		port = os.Args[1]
 	}
