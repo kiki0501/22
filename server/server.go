@@ -247,12 +247,14 @@ func StartServer(port string, authToken string, authService *auth.AuthService) {
 	logger.Info("按Ctrl+C停止服务器")
 
 	// 创建自定义HTTP服务器以支持长时间请求
+	// HuggingFace需要监听0.0.0.0以接受外部连接
+	addr := "0.0.0.0:" + port
 	server := &http.Server{
-		Addr:    ":" + port,
+		Addr:    addr,
 		Handler: r,
 	}
 
-	logger.Info("启动HTTP服务器", logger.String("port", port))
+	logger.Info("启动HTTP服务器", logger.String("addr", addr))
 
 	if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		logger.Error("启动服务器失败", logger.Err(err), logger.String("port", port))
